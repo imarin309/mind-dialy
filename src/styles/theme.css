@@ -10,3 +10,128 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+@layer components {
+  /* Header Components */
+  .app-header {
+    @apply fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200;
+  }
+
+  .app-header-container {
+    @apply max-w-7xl mx-auto px-4 py-4 flex items-center justify-between;
+  }
+
+  .app-title {
+    @apply text-xl md:text-2xl font-bold text-gray-900;
+  }
+
+  /* Button Components */
+  .btn-reset {
+    @apply flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg shadow-md hover:bg-gray-800 transition-all;
+  }
+
+  .btn-action {
+    @apply w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors;
+  }
+
+  .btn-action-add {
+    @apply w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors;
+  }
+
+  .btn-action-delete {
+    @apply w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500 shadow-lg flex items-center justify-center hover:bg-red-600 transition-colors;
+  }
+
+  /* Main Content */
+  .main-content {
+    @apply pt-24 pb-12 px-4 overflow-auto;
+  }
+
+  .main-content-container {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .mindmap-wrapper {
+    @apply flex justify-center items-start;
+  }
+
+  /* MindMap Node Components */
+  .node-container {
+    @apply flex flex-col items-center gap-4 md:gap-6;
+  }
+
+  .node-wrapper {
+    @apply relative;
+  }
+
+  .node-base {
+    @apply relative rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center cursor-pointer;
+  }
+
+  .node-root {
+    @apply w-40 h-40 md:w-48 md:h-48 bg-white border-2 border-blue-200;
+  }
+
+  .node-child {
+    @apply w-32 h-32 md:w-36 md:h-36 bg-white border-2 border-blue-200 hover:scale-105;
+  }
+
+  .node-glow {
+    @apply absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300;
+  }
+
+  .node-content {
+    @apply relative z-10 w-full h-full flex items-center justify-center p-4;
+  }
+
+  .node-text {
+    @apply text-gray-900 text-center break-words overflow-hidden;
+  }
+
+  .node-input {
+    @apply w-full h-full bg-gray-50 text-gray-900 placeholder:text-gray-400 text-center rounded-lg px-2 outline-none border-2 border-gray-300 focus:border-gray-500;
+  }
+
+  .node-actions {
+    @apply absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300;
+  }
+
+  /* Connection Lines */
+  .connection-line-vertical {
+    @apply absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-gray-300 -translate-y-6;
+  }
+
+  .connection-line-to-parent {
+    @apply absolute bottom-full left-1/2 -translate-x-1/2 w-px h-6 bg-gray-300;
+  }
+
+  /* Children Container */
+  .children-container {
+    @apply relative;
+  }
+
+  .children-row {
+    @apply flex flex-wrap justify-center gap-4 md:gap-8 relative;
+  }
+
+  .child-wrapper {
+    @apply relative;
+  }
+
+  /* Icon sizes */
+  .icon-sm {
+    @apply w-4 h-4;
+  }
+
+  .icon-md {
+    @apply w-4 h-4 md:w-5 md:h-5;
+  }
+
+  .icon-text {
+    @apply text-gray-700;
+  }
+
+  .icon-delete {
+    @apply text-white;
+  }
+}
