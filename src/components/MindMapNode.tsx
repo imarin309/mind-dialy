@@ -1,12 +1,8 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { type MindMapNodeData } from '../domain/mindmap';
 
-export interface MindMapNodeData {
-  id: string;
-  text: string;
-  children: MindMapNodeData[];
-}
 
 interface MindMapNodeProps {
   node: MindMapNodeData;
@@ -17,14 +13,14 @@ interface MindMapNodeProps {
   level?: number;
 }
 
-export function MindMapNode({
+export const MindMapNode = memo(({
   node,
   onAddChild,
   onDelete,
   onUpdateText,
   isRoot = false,
   level = 0,
-}: MindMapNodeProps) {
+}: MindMapNodeProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(node.text);
 
@@ -44,40 +40,22 @@ export function MindMapNode({
     }
   };
 
-  
-  const colorClass = 'bg-white border-2 border-blue-200';
-
-  const textColorClass = 'text-gray-900';
-
   return (
-    <div className="flex flex-col items-center gap-4 md:gap-6">
+    <div className="node-container">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        className="relative group"
+        className="node-wrapper group"
       >
         <div
-          className={`
-            relative
-            ${isRoot ? 'w-40 h-40 md:w-48 md:h-48' : 'w-32 h-32 md:w-36 md:h-36'}
-            rounded-2xl
-            ${colorClass}
-            shadow-lg hover:shadow-2xl
-            transition-all duration-300
-            flex items-center justify-center
-            cursor-pointer
-            ${!isRoot && 'hover:scale-105'}
-          `}
+          className={`node-base ${isRoot ? 'node-root' : 'node-child'}`}
           onClick={() => !isEditing && setIsEditing(true)}
         >
-          {/* Glow effect */}
-          <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="node-glow" />
 
-          
-          {/* Content */}
-          <div className="relative z-10 w-full h-full flex items-center justify-center p-4">
+          <div className="node-content">
             {isEditing ? (
               <input
                 type="text"
@@ -85,19 +63,19 @@ export function MindMapNode({
                 onChange={(e) => setEditText(e.target.value)}
                 onBlur={handleSave}
                 onKeyDown={handleKeyDown}
-                className="w-full h-full bg-gray-50 text-gray-900 placeholder:text-gray-400 text-center rounded-lg px-2 outline-none border-2 border-gray-300 focus:border-gray-500"
+                className="node-input"
                 placeholder="テキストを入力"
                 autoFocus
               />
             ) : (
-              <p className={`${textColorClass} text-center break-words overflow-hidden`}>
+              <p className="node-text">
                 {node.text}
               </p>
             )}
           </div>
 
-          {/* Action buttons */}
-          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* add button */}
+          <div className="node-actions">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -105,12 +83,13 @@ export function MindMapNode({
                 e.stopPropagation();
                 onAddChild(node.id);
               }}
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+              className="btn-action-add"
               title="子ノードを追加"
             >
-              <Plus className="w-4 h-4 md:w-5 md:h-5 text-gray-700" />
+              <Plus className="icon-md icon-text" />
             </motion.button>
 
+            {/* delete button */}
             {!isRoot && (
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -119,10 +98,10 @@ export function MindMapNode({
                   e.stopPropagation();
                   onDelete(node.id);
                 }}
-                className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500 shadow-lg flex items-center justify-center hover:bg-red-600 transition-colors"
+                className="btn-action-delete"
                 title="削除"
               >
-                <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                <Trash2 className="icon-md icon-delete" />
               </motion.button>
             )}
           </div>
@@ -131,17 +110,17 @@ export function MindMapNode({
 
       {/* Children */}
       {node.children.length > 0 && (
-        <div className="relative">
+        <div className="children-container">
           {/* Connecting line - vertical */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-6 bg-gray-300 -translate-y-6" />
-          
+          <div className="connection-line-vertical" />
+
           {/* Children in horizontal row */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8 relative">
+          <div className="children-row">
             {node.children.map((child) => (
-              <div key={child.id} className="relative">
+              <div key={child.id} className="child-wrapper">
                 {/* Vertical connecting line to parent */}
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 w-px h-6 bg-gray-300" />
-                
+                <div className="connection-line-to-parent" />
+
                 <MindMapNode
                   node={child}
                   onAddChild={onAddChild}
@@ -156,4 +135,4 @@ export function MindMapNode({
       )}
     </div>
   );
-}
+});
