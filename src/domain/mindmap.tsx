@@ -88,3 +88,36 @@ export function updateNodeById(
 
   return updateNode(node);
 }
+
+/**
+ * マインドマップをMarkdown形式に変換する
+ * 階層が一つ下がるごとに#が増える
+ */
+export function convertToMarkdown(
+  node: MindMapNodeData,
+  level: number = 1
+): string {
+  let markdown = '';
+
+  // タイトルまたはテキストがある場合のみ出力
+  if (node.title || node.text) {
+    const heading = '#'.repeat(level);
+
+    // タイトルを見出しとして追加
+    if (node.title) {
+      markdown += `${heading} ${node.title}\n\n`;
+    }
+
+    // テキストを本文として追加
+    if (node.text) {
+      markdown += `${node.text}\n\n`;
+    }
+  }
+
+  // 子ノードを再帰的に処理
+  node.children.forEach(child => {
+    markdown += convertToMarkdown(child, level + 1);
+  });
+
+  return markdown;
+}

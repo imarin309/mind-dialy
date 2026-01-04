@@ -7,6 +7,7 @@ import {
   deleteNodeById,
   updateNodeTextById,
   updateNodeById,
+  convertToMarkdown,
 } from './domain/mindmap';
 
 export default function App() {
@@ -42,9 +43,34 @@ export default function App() {
     });
   };
 
+  const saveMindMap = () => {
+    const markdown = convertToMarkdown(rootNode);
+    const title = rootNode.title || '無題';
+    const sanitizedTitle = title.replace(/[/\\:*?"<>|]/g, '');
+    const now = new Date();
+    const dateTime = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+    const fileName = `${sanitizedTitle}_${dateTime}.md`;
+
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+
+    // ダウンロードリンクを作成
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+
+    // リンクをクリックしてダウンロード
+    document.body.appendChild(link);
+    link.click();
+
+    // クリーンアップ
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header onReset={resetMindMap} />
+      <Header onReset={resetMindMap} onSave={saveMindMap} />
 
       <div className="main-content">
         <div className="main-content-container">
