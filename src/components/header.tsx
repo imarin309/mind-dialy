@@ -11,10 +11,10 @@ export function Header({ onReset, onSave }: HeaderProps) {
     <div className="app-header">
       <div className="app-header-container">
         <div className="flex items-center gap-3">
-          {/* TODO: アイコンを設定 */}
+          <img src="/icons/icon.png" alt="アイコン" className="w-12 h-12" />
           <div>
             <h1 className="app-title">
-              マインドマップ
+              mind dialy
             </h1>
           </div>
         </div>
